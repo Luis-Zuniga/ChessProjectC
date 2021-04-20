@@ -1,137 +1,136 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "chess_lfz.h"
 
-#define MOVE 5
+//#define MOVE 6
 
-void show_board(char board[8][8])
-{
-for (int i=0; i<8; i=i+1)
-{
-for (int j=0; j<8; j=j+1)
-{
-printf("%c ",board[i][j] );
+struct chesspiece {
+	char currentposition[3];
+	int hasmoved;
+	char unicodepiece[7];
+	int color;
+	int pieceeat[5][2];
+	int piecemove[][2];
 };
-printf("\n");
+
+int checkking(struct chesspiece king){
+	return 1;
 };
-}
 
 int main(void){
 
+/* Making the Pieces Structs */
+
+
+/*
+struct chesspiece a2pawn =
+{};
+struct chesspiece b2pawn =
+{};
+struct chesspiece c2pawn =
+{};
+struct chesspiece d2pawn =
+{};
+struct chesspiece e2pawn =
+{};
+struct chesspiece f2pawn =
+{};
+struct chesspiece g2pawn =
+{};
+struct chesspiece h2pawn =
+{};
+struct chesspiece a7pawn =
+{};
+struct chesspiece b7pawn =
+{};
+struct chesspiece c7pawn =
+{};
+struct chesspiece d7pawn =
+{};
+struct chesspiece e7pawn =
+{};
+struct chesspiece f7pawn =
+{};
+struct chesspiece g7pawn =
+{};
+struct chesspiece h7pawn =
+{};
+*/
+
 /* Making the Board */
-char wteam[8] = {'K','Q','B','N','R','P'};
-char bteam[8] = {'k','q','b','n','r','p'};
-char board[8][8] = {
-{bteam[4],bteam[3],bteam[2],bteam[1],bteam[0],bteam[2],bteam[3],bteam[4]},
-{bteam[5],bteam[5],bteam[5],bteam[5],bteam[5],bteam[5],bteam[5],bteam[5],},
-{' ',' ',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ',' ',' ',' ',' ',' '},
-{wteam[5],wteam[5],wteam[5],wteam[5],wteam[5],wteam[5],wteam[5],wteam[5],},
-{wteam[4],wteam[3],wteam[2],wteam[1],wteam[0],wteam[2],wteam[3],wteam[4]}
+char board[8][8];
+
+makeboard(board);
+
+show_board(board);
+
+/* making the pieces*/
+//[x,y] if 0 then no move,
+//if 1 then move 1 space,
+//if 2 then move 2 space,
+//if -1 then move -1 space,
+//if -2 then move -2 space,
+//if 3 then move any number in direction,
+//if {3,3}, then x and y movement must be the same
+int rookmove[][2] = {{0,3},{3,0}};
+int bishopmove[][2]= {{3,3},{-3,3}};
+int queenmove[][2]= {{0,3},{3,0},{3,3},{-3,3}};
+int pawnmove[][2]= {{0,1},{0,2}};
+int kingmove[][2]= {{0,1},{1,0},{0,-1},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+int knightmove[][2]= {{1,2},{1,-2},{-1,2},{-1,-2},{2,-1},{2,1},{-2,1},{-2,-1}};
+
+int rookeat[][2]= {{0,3},{3,0}};
+int bishopeat[][2]= {{3,3},{-3,3}};
+int queeneat[][2]= {{0,3},{3,0},{3,3},{-3,3}};
+int pawneat[][2]= {{-1,1},{1,1}};
+int kingeat[][2]= {{0,1},{1,0},{0,-1},{-1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
+int knighteat[][2]= {{1,2},{1,-2},{-1,2},{-1,-2},{2,-1},{2,1},{-2,1},{-2,-1}};;
+
+struct chesspiece board1[8][8];
+
+struct chesspiece e2pawn =
+{
+	"e2",
+	0,
+	"\u2659",
+	1,
+	**pawneat,
+	**pawnmove
+};
+
+board1[1][1]= e2pawn;
+
+/*struct chesspiece e2pawn =
+{
+	"e2",
+	0,
+	"\u2659",
+	1,
+	**pawneat,
+	**pawnmove
+};*/
+//strcpy(e2pawn.currentposition,"e2");
+//e2pawn.piecemove[0][0] = **pawnmove;
+//e2pawn.pieceeat = pawneat;
+//e2pawn.hasmoved = 0;
+//e2pawn.color = 1;
+//strcpy(e2pawn.unicodepiece,"\u2659");
+
+
+/* playing the game*/
+while(1){
+	int contplay = taketurn(board);
+	if(contplay==0){
+		break;
+	}
 };
 
 /* Print the Board */
-show_board(board);
-
-/* Take User Input */
-printf("Make a move: 'e.g. E2E4'\n");
-char movin[MOVE];
-fgets(movin, MOVE, stdin);
-printf("%s \n",movin);
-
-/* Format User Input 
-
--make sure in form letter-number-letter-number
--make sure A-H
--make sure capital
--make sure 1-8
-*/
-if ((strchr("ABCDEFGH",movin[0])||strchr("abcdefgh",movin[0]))&&strchr("12345678",movin[1])&&(strchr("ABCDEFGH",movin[2])||strchr("abcdefgh",movin[2]))&&strchr("12345678",movin[3])) 
-{
-printf("The format is a#a#, with #s 1-8 and letters a-h.\n");
-} else {
-printf("The format is not a#a#, or the numbers are not 1-8 and letters not a-h.\n");
-return 0;
-};
+//show_board(board);
+printf("The game ends here.\n");
 
 
-/* Interpret User Input */
-for (int i = 0; i<3; i=i+2) {
-switch(movin[i]) {
-	case 'A':
-		movin[i]='0';
-		break;
-	case 'B':
-		movin[i]='1';
-		break;
-	case 'C':
-		movin[i]='2';
-		break;
-	case 'D':
-                movin[i]='3';
-		break;
-	case 'E':
-                movin[i]='4';
-		break;
-	case 'F':
-                movin[i]='5';
-		break;
-	case 'G':
-                movin[i]='6';
-		break;
-	case 'H':
-                movin[i]='7';
-};
-};
 
-for (int i = 1; i<4; i=i+2) {
-switch(movin[i]) {
-        case '1':
-                movin[i]='7';
-                break;
-        case '2':
-                movin[i]='6';
-                break;
-        case '3':
-                movin[i]='5';
-                break;
-        case '4':
-                movin[i]='4';
-                break;
-        case '5':
-                movin[i]='3';
-                break;
-        case '6':
-                movin[i]='2';
-                break;
-        case '7':
-                movin[i]='1';
-                break;
-        case '8':
-                movin[i]='0';
-};
-};
-
-printf("%s \n",movin);
-
-/* Validate Move i.e. check if legal */
-
-/* Make Changes to Board Based on User Input */
-int colin = movin[0]-'0';
-int rowin = movin[1]-'0';
-int colout = movin[2]-'0';
-int rowout = movin[3]-'0';
-
-printf("Moving piece from [%i,%i] to [%i,%i].\n",rowin,colin,rowout,colout);
-
-
-board[rowout][colout] = board[rowin][colin];
-board[rowin][colin] = ' ';
-
-show_board(board);
 
 }
-
-
